@@ -6,16 +6,11 @@ import fastclick from 'fastclick'
 import 'common/stylus/index.styl'
 /* eslint-disable */
 
-
 Vue.config.productionTip = false
-
 
 fastclick.attach(document.body)
 
-
-
 new Vue({
   el: '#app',
-  router,
   render: h => h(App)
 })
