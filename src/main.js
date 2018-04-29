@@ -1,12 +1,13 @@
 import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
-// import router from './router'
+// import Router from './router'
 import fastclick from 'fastclick'
 import 'common/stylus/index.styl'
-/* eslint-disable */
 
-Vue.config.productionTip = false
+fastclick.attach(document.body)
+
+/* eslint-disable  no-new  */
 
 fastclick.attach(document.body)
 
