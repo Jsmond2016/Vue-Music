@@ -26,13 +26,13 @@ module.exports = {
   },
   output: {
     path: config.build.assetsRoot,
-    filename: '[name].js',
+    filename: '[name]jsonp.js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['jsonp.js', '.vue', '.json'],
     alias: {
       'src': resolve('src'),
       'common': resolve('src/common'),
