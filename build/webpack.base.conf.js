@@ -32,7 +32,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['jsonp.js', '.vue', '.json'],
+    extensions: ['*', '.vue', '.json', '.js'],
     alias: {
       'src': resolve('src'),
       'common': resolve('src/common'),
