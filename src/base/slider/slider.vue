@@ -5,7 +5,7 @@
       </slot>
     </div>
     <div class="dots">
-      <span class="dot" :class="{active: currentPageIndex === index }" v-for="(item, index) in dots" :key="index"></span>
+      <span class="dot" v-for="(item, index) in dots" :class="{active: currentPageIndex === index }"  :key="index"></span>
     </div>
   </div>
 </template>
@@ -97,6 +97,7 @@
 
         this.slider.on('scrollEnd', () => {
           let pageIndex = this.slider.getCurrentPage().pageX
+          console.log('-----' + pageIndex)
           if (this.loop) {
             pageIndex -= 1
           }
@@ -168,5 +169,6 @@
         &.active
           width: 20px
           border-radius: 5px
-          background: $color-text-ll
+          /*background: $color-text-ll*/
+          background: red
 </style>
