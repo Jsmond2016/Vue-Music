@@ -89,21 +89,22 @@
           scrollX: true,
           scrollY: false,
           momentum: false,
-          snap: true,
-          snapLoop: this.loop,
-          snapThreshold: 0.3,
-          snapSpeed: 400
+          snap: {
+            loop: this.loop,
+            threshold: 0.3,
+            speed: 400,
+          }
         })
 
         this.slider.on('scrollEnd', () => {
           let pageIndex = this.slider.getCurrentPage().pageX
-          console.log('-----' + pageIndex)
           if (this.loop) {
             pageIndex -= 1
           }
           this.currentPageIndex = pageIndex
 
           if (this.autoPlay) {
+            clearTimeout(this.timer)
             this._play()
           }
         })
@@ -169,6 +170,5 @@
         &.active
           width: 20px
           border-radius: 5px
-          /*background: $color-text-ll*/
-          background: red
+          background: $color-text-ll
 </style>
