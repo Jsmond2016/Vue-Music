@@ -63,7 +63,7 @@
     deactivated() {
       clearTimeout(this.timer)
     },
-    beforeDestroy() {
+    destroyed() {
       clearTimeout(this.timer)
     },
     methods: {
@@ -92,15 +92,15 @@
           snap: {
             loop: this.loop,
             threshold: 0.3,
-            speed: 400,
+            speed: 400
           }
         })
 
         this.slider.on('scrollEnd', () => {
           let pageIndex = this.slider.getCurrentPage().pageX
-          if (this.loop) {
-            pageIndex -= 1
-          }
+          // if (this.loop) {
+          //   pageIndex -= 1
+          // }
           this.currentPageIndex = pageIndex
 
           if (this.autoPlay) {
