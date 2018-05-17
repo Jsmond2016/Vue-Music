@@ -1,13 +1,23 @@
 <template>
-    <transition name="slide">
-      <div class="singer-detail"></div>
-    </transition>
+  <transition name="slide">
+    <div class="singer-detail"></div>
+  </transition>
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        components: {}
-    }
+  import {mapGetters} from 'vuex'
+
+  export default {
+    computed: {
+      ...mapGetters([
+        'singer'
+      ])
+    },
+    created() {
+      console.log(this.singer)
+    },
+    components: {}
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -19,8 +29,9 @@
     right: 0
     bottom: 0
     background: #222
+
   .slide-enter-active, .slide-leave-active
-     transition: all 0.3s
+    transition: all 0.3s
 
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
