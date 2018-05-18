@@ -22,7 +22,7 @@ export function getData(el, name, val) {
 }
 
 let elementStyle = document.createElement('div').style
-
+// 不同供应商对应的不同的 transform
 let vendor = (() => {
   let transformNames = {
     webkit: 'webkitTransform',
