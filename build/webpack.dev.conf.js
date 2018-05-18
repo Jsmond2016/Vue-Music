@@ -47,6 +47,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     before(app) {
       app.get('/api/getRecommend', function (req, res) {
         const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
+       // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://m.y.qq.com',
@@ -62,6 +63,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/getDiscList', function (req, res) {
         const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com/',
@@ -77,6 +79,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/getDiscSongList', function (req, res) {
         const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com/',
@@ -92,6 +95,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/getSingerList', function (req, res) {
         const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://y.qq.com/portal/singer_list.html',
@@ -107,6 +111,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/getSingerDetail', function (req, res) {
         const url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://y.qq.com/n/yqq/singer/003Nz2So3XXYek.html',
@@ -123,6 +128,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/getCdInfo', function (req, res) {
         const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com/',
@@ -146,7 +152,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/lyric', function (req, res) {
         const url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
-
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com/',
@@ -170,6 +176,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/getTopList', function (req, res) {
         const url = 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg'
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'https://m.y.qq.com',
@@ -185,6 +192,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
       app.get('/api/getDetailToplist', function (req, res) {
         const url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg'
+        // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {
             referer: 'c.y.qq.com',
