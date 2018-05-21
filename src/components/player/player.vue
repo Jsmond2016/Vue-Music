@@ -35,8 +35,8 @@
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
           <div class="operators">
-            <div class="icon i-left">
-              <i class="icon-sequence"></i>
+            <div class="icon i-left" @click="changeMode">
+              <i :class="iconMode"></i>
             </div>
             <div class="icon i-left" :class="disableCls">
               <i class="icon-prev" @click="pre"></i>
@@ -83,6 +83,7 @@
   import {prefixStyle} from 'common/js/dom'
   import ProgressBar from 'base/progress-bar/progress-bar'
   import ProgressCircle from 'base/progress-circle/progress-circle'
+  import {playMode} from 'common/js/config'
   const transform = prefixStyle('transform')
     export default {
         props: {},
@@ -92,7 +93,8 @@
             'playlist',
             'currentSong',
             'playing',
-            'currentIndex'
+            'currentIndex',
+            'mode'
           ]),
           playIcon() {
             return this.playing ? 'icon-pause' : 'icon-play'
@@ -108,158 +110,167 @@
           },
           percent() {
             return this.currentTime / this.currentSong.duration
+          },
+          iconMode() {
+            return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
           }
         },
-      watch: {
-        currentSong() {
-            this.$nextTick(() => {
-              this.$refs.audio.play()
-            })
-          },
-        playing(newPlaying) {
-            const audio = this.$refs.audio
-            this.$nextTick(() => {
-              newPlaying ? audio.play() : audio.pause()
-            })
-        }
-      },
+        watch: {
+          currentSong() {
+              this.$nextTick(() => {
+                this.$refs.audio.play()
+              })
+            },
+          playing(newPlaying) {
+              const audio = this.$refs.audio
+              this.$nextTick(() => {
+                newPlaying ? audio.play() : audio.pause()
+              })
+          }
+        },
         data() {
             return {
               songReady: false,
               currentTime: 0,
               radius: 32
             }
-      },
-      methods: {
-        onProgressBarchange(percent) {
-          this.$refs.audio.currentTime = this.currentSong.duration * percent
-          if (!this.playing) {
-            this.togglePlaying()
-          }
         },
-        format(interval) {
-          interval = interval | 0
-          const minute = interval / 60 | 0
-          const second = this._pad(interval % 60)
-          return `${minute}:${second}`
-        },
-        _pad(num, n = 2) { // 时间戳补0
-          let len = num.toString().length
-          while (len < n) {
-            num = '0' + num
-            len++
-          }
-          return num
-        },
-        updateTime(e) {
-          this.currentTime = e.target.currentTime
-        },
-        error () {
-          this.songReady = true
-        },
-        ready() {
-          this.songReady = true
-          console.log(this.songReady)
-        },
-        next() {
-          if (!this.songReady) {
-            return
-          }
-          let index = this.currentIndex + 1
-          if (index === this.playlist.length) {
-            index = 0
-          }
-          this.setCurrentIndex(index)
-          if (!this.playing) {
-            this.togglePlaying()
-          }
-          this.songReady = false
-        },
-        pre() {
-          if (!this.songReady) {
-            return
-          }
-          let index = this.currentIndex - 1
-          if (index === -1) {
-            index = this.playlist.length - 1
-          }
-          this.setCurrentIndex(index)
-        },
-        togglePlaying() {
-          this.setPlayingState(!this.playing)
-        },
-        back() {
-            this.setFullScreen(false)
+        methods: {
+          changeMode() {
+            const mode = (this.mode + 1) % 3
+            console.log(mode)
+            this.setPlayMode(mode)
           },
-        open() {
-            this.setFullScreen(true)
+          onProgressBarchange(percent) {
+            this.$refs.audio.currentTime = this.currentSong.duration * percent
+            if (!this.playing) {
+              this.togglePlaying()
+            }
           },
-        enter(el, done) {
-          const {x, y, scale} = this._getPosAndScale()
-
-          let animation = {
-            0: {
-              transform: `translate3d(${x}px,${y}px, 0) scale(${scale})`
-            },
-            60: {
-              transform: `translate3d(0, 0, 0) scale(1.1)`
-            },
-            100: {
-              transform: `translate3d(0, 0, 0) scale(1)`
+          format(interval) {
+            interval = interval | 0
+            const minute = interval / 60 | 0
+            const second = this._pad(interval % 60)
+            return `${minute}:${second}`
+          },
+          _pad(num, n = 2) { // 时间戳补0
+            let len = num.toString().length
+            while (len < n) {
+              num = '0' + num
+              len++
             }
-          }
-
-          animations.registerAnimation({
-            name: 'move',
-            animation,
-            presets: {
-              duration: 400,
-              easing: 'linear'
+            return num
+          },
+          updateTime(e) {
+            this.currentTime = e.target.currentTime
+          },
+          error () {
+            this.songReady = true
+          },
+          ready() {
+            this.songReady = true
+            console.log(this.songReady)
+          },
+          next() {
+            if (!this.songReady) {
+              return
             }
+            let index = this.currentIndex + 1
+            if (index === this.playlist.length) {
+              index = 0
+            }
+            this.setCurrentIndex(index)
+            if (!this.playing) {
+              this.togglePlaying()
+            }
+            this.songReady = false
+          },
+          pre() {
+            if (!this.songReady) {
+              return
+            }
+            let index = this.currentIndex - 1
+            if (index === -1) {
+              index = this.playlist.length - 1
+            }
+            this.setCurrentIndex(index)
+          },
+          togglePlaying() {
+            this.setPlayingState(!this.playing)
+          },
+          back() {
+              this.setFullScreen(false)
+            },
+          open() {
+              this.setFullScreen(true)
+            },
+          enter(el, done) {
+            const {x, y, scale} = this._getPosAndScale()
+
+            let animation = {
+              0: {
+                transform: `translate3d(${x}px,${y}px, 0) scale(${scale})`
+              },
+              60: {
+                transform: `translate3d(0, 0, 0) scale(1.1)`
+              },
+              100: {
+                transform: `translate3d(0, 0, 0) scale(1)`
+              }
+            }
+
+            animations.registerAnimation({
+              name: 'move',
+              animation,
+              presets: {
+                duration: 400,
+                easing: 'linear'
+              }
+            })
+
+            animations.runAnimation(this.$refs.cdWrapper, 'move', done)
+          },
+          afterEnter() {
+            animations.unregisterAnimation('move')
+            this.$refs.cdWrapper.style.animation = ''
+          },
+          leave(el, done) {
+            this.$refs.cdWrapper.style.transition = 'all 0.4s'
+            const {x, y, scale} = this._getPosAndScale()
+            this.$refs.cdWrapper.style[transform] = `translate3d(${x}px,${y}px,0) scale(${scale})`
+            this.$refs.cdWrapper.addEventListener('transitionend', done)
+          },
+          afterLeave() {
+            this.$refs.cdWrapper.style.transition = ''
+            this.$refs.cdWrapper.style[transform] = ''
+          },
+          _getPosAndScale() {
+            const targetWidth = 40
+            const paddingLeft = 40
+            const paddingBottom = 30
+            const paddingTop = 80
+            const width = window.innerWidth * 0.8
+            const scale = targetWidth / width
+            const x = -(window.innerWidth / 2 - paddingLeft)
+            const y = window.innerHeight - paddingTop - width / 2 - paddingBottom
+            return {
+              x,
+              y,
+              scale
+            }
+          },
+          ...mapMutations({
+            setFullScreen: 'SET_FULL_SCREEN',
+            setPlayingState: 'SET_PLAYING_STATE',
+            setCurrentIndex: 'SET_CURRENT_INDEX',
+            setPlayMode: 'SET_PLAY_MODE'
           })
-
-          animations.runAnimation(this.$refs.cdWrapper, 'move', done)
         },
-        afterEnter() {
-          animations.unregisterAnimation('move')
-          this.$refs.cdWrapper.style.animation = ''
-        },
-        leave(el, done) {
-          this.$refs.cdWrapper.style.transition = 'all 0.4s'
-          const {x, y, scale} = this._getPosAndScale()
-          this.$refs.cdWrapper.style[transform] = `translate3d(${x}px,${y}px,0) scale(${scale})`
-          this.$refs.cdWrapper.addEventListener('transitionend', done)
-        },
-        afterLeave() {
-          this.$refs.cdWrapper.style.transition = ''
-          this.$refs.cdWrapper.style[transform] = ''
-        },
-        _getPosAndScale() {
-          const targetWidth = 40
-          const paddingLeft = 40
-          const paddingBottom = 30
-          const paddingTop = 80
-          const width = window.innerWidth * 0.8
-          const scale = targetWidth / width
-          const x = -(window.innerWidth / 2 - paddingLeft)
-          const y = window.innerHeight - paddingTop - width / 2 - paddingBottom
-          return {
-            x,
-            y,
-            scale
-          }
-        },
-        ...mapMutations({
-          setFullScreen: 'SET_FULL_SCREEN',
-          setPlayingState: 'SET_PLAYING_STATE',
-          setCurrentIndex: 'SET_CURRENT_INDEX'
-        })
-      },
-      components: {
-        ProgressBar,
-        ProgressCircle
+        components: {
+          ProgressBar,
+          ProgressCircle
+        }
       }
-    }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
