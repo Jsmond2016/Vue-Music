@@ -129,8 +129,9 @@
       methods: {
         onProgressBarchange(percent) {
           this.$refs.audio.currentTime = this.currentSong.duration * percent
-          console.log(222)
-          console.log(this.$refs.audio.currentTime)
+          if (!this.playing) {
+            this.togglePlaying()
+          }
         },
         format(interval) {
           interval = interval | 0
