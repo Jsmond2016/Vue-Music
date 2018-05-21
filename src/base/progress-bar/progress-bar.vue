@@ -27,7 +27,7 @@
       }
     },
     created() {
-      this.touch = {}i
+      this.touch = {}
     },
     methods: {
       progressTouchStart(e) {
