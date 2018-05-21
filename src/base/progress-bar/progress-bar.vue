@@ -27,7 +27,7 @@
       }
     },
     created() {
-      this.touch = {}
+      this.touch = {}i
     },
     methods: {
       progressTouchStart(e) {
@@ -49,10 +49,9 @@
       },
       progressClick(e) {
         const rect = this.$refs.progressBar.getBoundingClientRect()
-        const offsetWidth = e.pageX - rect.left
-        this._offset(offsetWidth)
+        const offsetWidth = e.pageX - rect.left // 鼠标相对视口位置减去progressbar的起始位置
         // 这里当我们点击 progressBtn 的时候，e.offsetX 获取不对
-        // this._offset(e.offsetX)
+        this._offset(offsetWidth)
         this._triggerPercent()
       },
       _triggerPercent() {
