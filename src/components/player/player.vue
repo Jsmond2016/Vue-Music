@@ -84,6 +84,7 @@
   import ProgressBar from 'base/progress-bar/progress-bar'
   import ProgressCircle from 'base/progress-circle/progress-circle'
   import {playMode} from 'common/js/config'
+  import {shuffle} from 'common/js/util'
   const transform = prefixStyle('transform')
     export default {
         props: {},
@@ -94,7 +95,8 @@
             'currentSong',
             'playing',
             'currentIndex',
-            'mode'
+            'mode',
+            'sequenceList'
           ]),
           playIcon() {
             return this.playing ? 'icon-pause' : 'icon-play'
@@ -116,11 +118,14 @@
           }
         },
         watch: {
-          currentSong() {
-              this.$nextTick(() => {
-                this.$refs.audio.play()
+          currentSong(newSong, oldSong) {
+            if (newSong === oldSong) {
+              return
+            }
+            this.$nextTick(() => {
+              this.$refs.audio.play()
               })
-            },
+          },
           playing(newPlaying) {
               const audio = this.$refs.audio
               this.$nextTick(() => {
@@ -138,8 +143,22 @@
         methods: {
           changeMode() {
             const mode = (this.mode + 1) % 3
-            console.log(mode)
             this.setPlayMode(mode)
+            let list = null
+            if (mode === playMode.random) {
+              list = shuffle(this.sequenceList)
+            } else {
+              list = this.sequenceList
+            }
+            this.resetCurrentIndex(list)
+            this.setPlayList(list)
+            console.log(list)
+          },
+          resetCurrentIndex(list) {
+            let index = list.findIndex((item) => {
+              return item.id === this.currentSong.id
+            })
+            this.setCurrentIndex(index)
           },
           onProgressBarchange(percent) {
             this.$refs.audio.currentTime = this.currentSong.duration * percent
@@ -263,7 +282,8 @@
             setFullScreen: 'SET_FULL_SCREEN',
             setPlayingState: 'SET_PLAYING_STATE',
             setCurrentIndex: 'SET_CURRENT_INDEX',
-            setPlayMode: 'SET_PLAY_MODE'
+            setPlayMode: 'SET_PLAY_MODE',
+            setPlayList: 'SET_PLAY_LIST'
           })
         },
         components: {
