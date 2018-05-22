@@ -198,7 +198,6 @@
           },
           ready() {
             this.songReady = true
-            console.log(this.songReady)
           },
           next() {
             if (!this.songReady) {
