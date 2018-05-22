@@ -25,6 +25,13 @@
               </div>
             </div>
           </div>
+          <div class="middle-r" ref="lyricList">
+            <div class="lyric-wrapper">
+              <div class="currentLyric" v-if="currentLyric">
+                <p ref="lyricLine" class="text" v-for="(line, index) in currentLyric.lines" :key="index">{{line.txt}}</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bottom">
           <div class="progress-wrapper">
@@ -204,6 +211,9 @@
           },
           error () {
             this.songReady = true
+            setTimeout(() => {
+              this.next()
+            }, 1000) // 歌曲加载失败的时候自动播放下一曲
           },
           ready() {
             this.songReady = true
