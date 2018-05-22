@@ -73,7 +73,7 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime"></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
 
@@ -119,7 +119,7 @@
         },
         watch: {
           currentSong(newSong, oldSong) {
-            if (newSong === oldSong) {
+            if (newSong.id === oldSong.id) {
               return
             }
             this.$nextTick(() => {
@@ -141,6 +141,17 @@
             }
         },
         methods: {
+          end() {
+            if (this.mode === playMode.loop) {
+              this.loop()
+            } else {
+              this.next()
+            }
+          },
+          loop() {
+            this.$refs.audio.currentTime = 0
+            this.$refs.audio.play()
+          },
           changeMode() {
             const mode = (this.mode + 1) % 3
             this.setPlayMode(mode)
@@ -152,7 +163,6 @@
             }
             this.resetCurrentIndex(list)
             this.setPlayList(list)
-            console.log(list)
           },
           resetCurrentIndex(list) {
             let index = list.findIndex((item) => {
