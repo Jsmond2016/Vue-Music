@@ -25,13 +25,15 @@
               </div>
             </div>
           </div>
-          <div class="middle-r" ref="lyricList">
+          <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
               <div class="currentLyric" v-if="currentLyric">
-                <p ref="lyricLine" class="text" v-for="(line, index) in currentLyric.lines" :key="index">{{line.txt}}</p>
+                <p ref="lyricLine" class="text" v-for="(line, index) in currentLyric.lines"
+                   :key="index"
+                   :class="{'current': currentLineNum === index}">{{line.txt}}</p>
               </div>
             </div>
-          </div>
+          </scroll>
         </div>
         <div class="bottom">
           <div class="progress-wrapper">
@@ -93,6 +95,7 @@
   import {playMode} from 'common/js/config'
   import {shuffle} from 'common/js/util'
   import Lyric from 'lyric-parser'
+  import Scroll from 'base/scroll/scroll'
   const transform = prefixStyle('transform')
     export default {
         props: {},
@@ -147,15 +150,21 @@
               songReady: false,
               currentTime: 0,
               radius: 32,
-              currentLyric: null
+              currentLyric: null,
+              currentLineNum: 0
             }
         },
         methods: {
           getLyric () {
             this.currentSong.getLyric().then((lyric) => {
-              this.currentLyric = new Lyric(lyric)
-              console.log(this.currentLyric)
+              this.currentLyric = new Lyric(lyric, this.handleLyric)
+              if (this.playing) {
+                this.currentLyric.play()
+              }
             })
+          },
+          handleLyric({lineNum, txt}) {
+              this.currentLineNum = lineNum
           },
           end() {
             if (this.mode === playMode.loop) {
@@ -316,7 +325,8 @@
         },
         components: {
           ProgressBar,
-          ProgressCircle
+          ProgressCircle,
+          Scroll
         }
       }
 </script>
