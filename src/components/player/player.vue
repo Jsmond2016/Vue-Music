@@ -165,6 +165,13 @@
           },
           handleLyric({lineNum, txt}) {
               this.currentLineNum = lineNum
+              // 设置歌词自动滚动
+              if (lineNum > 5) {
+                let lineEl = this.$refs.lyricLine[lineNum - 5]
+                this.$refs.lyricList.scrollToElement(lineEl)
+              } else {
+                this.$refs.lyricList.scrollTo(0, 0, 1000)
+              }
           },
           end() {
             if (this.mode === playMode.loop) {
