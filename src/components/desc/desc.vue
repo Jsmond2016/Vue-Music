@@ -5,7 +5,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import MusicList from 'common/music-list/music-list'
+  import MusicList from 'components/music-list/music-list'
     export default {
     components: {
       MusicList
