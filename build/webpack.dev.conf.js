@@ -87,7 +87,16 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           },
           params: req.query
         }).then((response) => {
-          res.json(response.data) // axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
+          var ret = response.data
+          // 返回的是JSONP格式的话
+          if (typeof ret === 'string') {
+            var reg = /^\w+\(({.+})\)$/
+            var matches = ret.match(reg)
+            if (matches) {
+              ret = JSON.parse(matches[1])
+            }
+          }
+          res.json(ret)// axios 返回的数据在 response.data，要把数据透传到我们自定义的接口里面 res.json(response.data)
         }).catch((e) => {
           console.log(e)
         })

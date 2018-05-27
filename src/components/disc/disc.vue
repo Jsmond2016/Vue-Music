@@ -8,7 +8,7 @@
   import MusicList from 'components/music-list/music-list'
   import {mapGetters} from 'vuex'
   import {getSongList} from 'api/recommend'
-  import ERR_OK from 'api/config'
+  import {ERR_OK} from 'api/config'
   import {createSong} from 'common/js/song'
 
   export default {
@@ -33,13 +33,19 @@
     },
     methods: {
       _getSongList() {
+        if (!this.disc.dissid) {
+          this.$router.push('/recommend')
+          return
+        }
+        console.log(this.disc)
         getSongList(this.disc.dissid).then((res) => {
+          console.log(res)
           if (res.code === ERR_OK) {
-            this.songs = res.cddist[0].songlist
+            this.songs = this._normalizeSongs(res.cdlist[0].songlist)
           }
         })
       },
-      normalizeSongs(list) {
+      _normalizeSongs(list) {
           let ret = []
           list.forEach((musicData) => {
             if (musicData.songid && musicData.albumid) {
