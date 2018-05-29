@@ -21,7 +21,7 @@
                 <i class="icon-clear"></i>
               </span>
             </h1>
-            <search-list @delete="deleteOne" @select="addQuery" :searches="searchHistory"></search-list>
+            <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></search-list>
           </div>
         </div>
       </scroll>
@@ -29,7 +29,7 @@
     <div class="search-result" v-show="query" ref="searchResult">
       <suggest @listScroll="blurInput" @select="saveSearch" ref="suggest" :query="query"></suggest>
     </div>
-    <confirm ref="confirm" @confirm="deleteAll" text="是否清空所有搜索历史" confirmBtnText="清空"></confirm>
+    <confirm ref="confirm" @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirmBtnText="清空"></confirm>
     <router-view></router-view>
   </div>
 </template>
@@ -81,14 +81,8 @@
           }
         })
       },
-      deleteOne(item) {
-        this.deleteSearchHistory(item)
-      },
       saveSearch() {
         this.saveSearchHistory(this.query)
-      },
-      deleteAll() {
-        this.clearSearchHistory()
       },
       ...mapActions([
         'clearSearchHistory',
