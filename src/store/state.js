@@ -9,7 +9,8 @@ const state = {
   mode: playMode.sequence, // 播放模式徐选择
   currentIndex: -1,
   disc: {},
-  topList: {}
+  topList: {},
+  searchHistory: []
 }
 
 export default state

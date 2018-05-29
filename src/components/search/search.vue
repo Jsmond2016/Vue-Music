@@ -63,10 +63,8 @@
     methods: {
       handlePlaylist(playlist) {
         const bottom = playlist.length > 0 ? '60px' : ''
-
         this.$refs.searchResult.style.bottom = bottom
         this.$refs.suggest.refresh()
-
         this.$refs.shortcutWrapper.style.bottom = bottom
         this.$refs.shortcut.refresh()
       },
@@ -79,6 +77,9 @@
             this.hotKey = res.data.hotkey.slice(0, 10)
           }
         })
+      },
+      saveSearch() {
+
       },
       ...mapActions([
         'clearSearchHistory'
