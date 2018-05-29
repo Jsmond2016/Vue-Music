@@ -79,10 +79,11 @@
         })
       },
       saveSearch() {
-
+        this.saveSearchHistory(this.query)
       },
       ...mapActions([
-        'clearSearchHistory'
+        'clearSearchHistory',
+        'saveSearchHistory'
       ])
     },
     watch: {
