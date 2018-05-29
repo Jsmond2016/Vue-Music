@@ -21,7 +21,7 @@
                 <i class="icon-clear"></i>
               </span>
             </h1>
-            <search-list @delete="deleteOne" @select="addQuery" :searches="searchHistory"></search-list>
+            <search-list @delete="deleteOneSearch" @select="addQuery" :searches="searchHistory"></search-list>
           </div>
         </div>
       </scroll>
@@ -81,7 +81,7 @@
           }
         })
       },
-      deleteOne(item) {
+      deleteOneSearch(item) {
         this.deleteSearchHistory(item)
       },
       saveSearch() {

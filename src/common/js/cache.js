@@ -22,6 +22,7 @@ function deleteFromArray(arr, compair) {
   if (index > -1) {
     arr.splice(index, 1)
   }
+  // console.log(arr)
 }
 
 export function saveSearch(query) {
@@ -38,6 +39,7 @@ export function loadSearch() {
 }
 
 export function deleteSearch(query) {
+  console.log(query)
   let ret = storage.get(SEARCH_KEY, [])
   deleteFromArray(ret, (item) => {
     return item === query
