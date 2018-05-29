@@ -21,7 +21,7 @@
                 <i class="icon-clear"></i>
               </span>
             </h1>
-            <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></search-list>
+            <search-list @delete="deleteOne" @select="addQuery" :searches="searchHistory"></search-list>
           </div>
         </div>
       </scroll>
@@ -43,7 +43,7 @@
   import {getHotKey} from 'api/search'
   import {ERR_OK} from 'api/config'
   import {playlistMixin, searchMixin} from 'common/js/mixin'
-  import {mapActions} from 'vuex'
+  import {mapActions, mapGetters} from 'vuex'
 
   export default {
     mixins: [playlistMixin, searchMixin],
@@ -55,7 +55,10 @@
     computed: {
       shortcut() {
         return this.hotKey.concat(this.searchHistory)
-      }
+      },
+      ...mapGetters([
+        'searchHistory'
+      ])
     },
     created() {
       this._getHotKey()
@@ -78,12 +81,16 @@
           }
         })
       },
+      deleteOne(item) {
+        this.deleteSearchHistory(item)
+      },
       saveSearch() {
         this.saveSearchHistory(this.query)
       },
       ...mapActions([
         'clearSearchHistory',
-        'saveSearchHistory'
+        'saveSearchHistory',
+        'deleteSearchHistory'
       ])
     },
     watch: {
