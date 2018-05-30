@@ -9,24 +9,24 @@
               <span class="clear"><i class="icon-clear"></i></span>
             </h1>
           </div>
-          <div class="list-content">
+          <scroll :data="sequenceList" class="list-content" ref="listContent">
             <ul>
-              <li class="item">
-                <i class="current"></i>
-                <span class="text"></span>
+              <li class="item" v-for="(item,index) in sequenceList" :key="index" @click="selectItem(item, index)">
+                <i class="current" :class="getCurrentIcon(item)"></i>
+                <span class="text">{{item.name}}</span>
                 <span class="like">
-                <i class="icon-not-favorite"></i>
-              </span>
+              <i class="icon-not-favorite"></i>
+            </span>
                 <span class="delete">
-                <i class="icon-delete"></i>
-              </span>
+              <i class="icon-delete"></i>
+            </span>
               </li>
             </ul>
-          </div>
+          </scroll>
           <div class="list-operate">
             <div class="add">
               <i class="icon-add"></i>
-              <span class="text"></span>
+              <span class="text">添加歌曲到队列</span>
             </div>
           </div>
           <div class="list-close" @click="hide">
@@ -38,20 +38,54 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
+  import {mapGetters, mapMutations} from 'vuex'
+  import Scroll from 'base/scroll/scroll'
+  import {playMode} from 'common/js/config'
+
+  export default {
       name: 'PlayList',
       data() {
         return {
           showFlag: false
         }
       },
+      computed: {
+        ...mapGetters([
+          'sequenceList',
+          'currentSong',
+          'playList'
+        ])
+      },
       methods: {
+        selectItem(item, index) {
+          if (this.mode === playMode.random) {
+            index = this.playList.findIndex((song) => {
+              return song.id === item.id
+            })
+          }
+          this.setCurrentIndex(index)
+        },
+        getCurrentIcon(item) {
+          if (this.currentSong.id === item.id) {
+            return 'icon-play'
+          }
+          return ''
+        },
         show() {
           this.showFlag = true
+          setTimeout(() => {
+            this.$refs.listContent.refresh()
+          }, 20)
         },
         hide() {
           this.showFlag = false
-        }
+        },
+        ...mapMutations({
+          setCurrentIndex: 'SET_CURRENT_INDEX'
+        })
+      },
+      components: {
+        Scroll
       }
     }
 </script>
