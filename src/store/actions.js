@@ -105,10 +105,12 @@ export const deleteSong = function ({commit, state}, song) {
     currentIndex--
   }
   commit(types.SET_PLAY_LIST, playlist)
-  commit(types.SET_PLAY_LIST, sequenceList)
+  commit(types.SET_SEQUENCE_LIST, sequenceList)
   commit(types.SET_CURRENT_INDEX, currentIndex)
 
   if (!playlist.length) {
     commit(types.SET_PLAYING_STATE, false)
+  } else {
+    commit(types.SET_PLAYING_STATE, true)
   }
 }
