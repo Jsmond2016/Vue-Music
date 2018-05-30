@@ -15,11 +15,11 @@
                 <i class="current" :class="getCurrentIcon(item)"></i>
                 <span class="text">{{item.name}}</span>
                 <span class="like">
-              <i class="icon-not-favorite"></i>
-            </span>
-                <span class="delete">
-              <i class="icon-delete"></i>
-            </span>
+                  <i class="icon-not-favorite"></i>
+                </span>
+                <span class="delete" @click="deleteOne(item)">
+                  <i class="icon-delete"></i>
+                </span>
               </li>
             </ul>
           </scroll>
@@ -53,10 +53,14 @@
         ...mapGetters([
           'sequenceList',
           'currentSong',
-          'playList'
+          'playList',
+          'mode'
         ])
       },
       methods: {
+        deleteOne(item) {
+
+        },
         selectItem(item, index) {
           if (this.mode === playMode.random) {
             index = this.playList.findIndex((song) => {
@@ -95,7 +99,7 @@
       },
       watch: {
         currentSong(newSong, oldSong) {
-          if (!this.showFlag || newSong.id === oldSongg.id) {
+          if (!this.showFlag || newSong.id === oldSong.id) {
             return
           }
           this.scrollToCurrent(newSong)
