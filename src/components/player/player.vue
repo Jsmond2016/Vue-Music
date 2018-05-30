@@ -88,11 +88,12 @@
             <i :class="miniIcon" @click.stop="togglePlaying" class="icon-mini"></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <Playlist ref="playlist"></Playlist>
     <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime"
            @ended="end"></audio>
   </div>
@@ -108,6 +109,7 @@
   import {shuffle} from 'common/js/util'
   import Lyric from 'lyric-parser'
   import Scroll from 'base/scroll/scroll'
+  import Playlist from 'components/playlist/playlist'
 
   const transform = prefixStyle('transform')
   const transitionDurantion = prefixStyle('transitionDuration')
@@ -177,6 +179,9 @@
       }
     },
     methods: {
+      showPlaylist() {
+        this.$refs.playlist.show()
+      },
       middleTouchStart(e) {
         this.touch.initiated = true
         const touch = e.touches[0]
@@ -432,7 +437,8 @@
     components: {
       ProgressBar,
       ProgressCircle,
-      Scroll
+      Scroll,
+      Playlist
     }
   }
 </script>
