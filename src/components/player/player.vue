@@ -110,20 +110,18 @@
   import Lyric from 'lyric-parser'
   import Scroll from 'base/scroll/scroll'
   import Playlist from 'components/playlist/playlist'
+  import {playerMixin} from 'common/js/mixin'
 
   const transform = prefixStyle('transform')
   const transitionDurantion = prefixStyle('transitionDuration')
   export default {
+    mixins: [playerMixin],
     props: {},
     computed: {
       ...mapGetters([
         'fullScreen',
-        'playlist',
-        'currentSong',
         'playing',
-        'currentIndex',
-        'mode',
-        'sequenceList'
+        'currentIndex'
       ]),
       playIcon() {
         return this.playing ? 'icon-pause' : 'icon-play'
