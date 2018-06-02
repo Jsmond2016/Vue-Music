@@ -13,9 +13,14 @@
         <div class="shortcut" v-show="!query">
           <switches :currentIndex="currentIndex" :switches="switches" @switch="switchItem"></switches>
           <div class="list-wrapper">
-            <scroll class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
+            <scroll ref="songList" class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
               <div class="list-inner">
                 <song-list :songs="playHistory" @select="selectSong"></song-list>
+              </div>
+            </scroll>
+            <scroll ref="searchList" class="list-scroll">
+              <div class="list-inner">
+                <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></search-list>
               </div>
             </scroll>
           </div>
@@ -36,6 +41,7 @@
   import {mapGetters, mapActions} from 'vuex'
   import SongList from 'base/song-list/song-list'
   import Song from 'common/js/song'
+  import SearchList from 'base/search-list/search-list'
   export default {
       mixins: [searchMixin],
       data() {
@@ -61,6 +67,13 @@
         },
         show() {
           this.showFlag = true
+          setTimeout(() => {
+            if (this.currentIndex === 0) {
+              this.$refs.songList.refresh()
+            } else {
+              this.$refs.searchList.refresh()
+            }
+          }, 20)
         },
         hide() {
           this.showFlag = false
@@ -85,7 +98,8 @@
         Suggest,
         Switches,
         Scroll,
-        SongList
+        SongList,
+        SearchList
       }
     }
 </script>
