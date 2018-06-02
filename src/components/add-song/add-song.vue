@@ -18,7 +18,7 @@
                 <song-list :songs="playHistory" @select="selectSong"></song-list>
               </div>
             </scroll>
-            <scroll ref="searchList" class="list-scroll">
+            <scroll ref="searchList" class="list-scroll" :refreshDelay="refreshDelay">
               <div class="list-inner">
                 <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"></search-list>
               </div>
