@@ -54,6 +54,10 @@ export function getSongList(disstid) {
   //   param: 'jsonpCallback',
   //   prefix: 'jsonpCallback'// 要加上这个
   // }
-
-  return jsonp(url, data, options)
+  // return jsonp(url, data, options)
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
 }

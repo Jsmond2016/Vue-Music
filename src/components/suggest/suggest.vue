@@ -185,7 +185,7 @@
         flex: 1
         font-size: $font-size-medium
         color: $color-text-d
-        overflow: hidden
+        /*overflow: hidden*/
         .text
           no-wrap()
     .no-result-wrapper
