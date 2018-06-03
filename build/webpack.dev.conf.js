@@ -78,7 +78,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       });
 
       app.get('/api/getDiscSongList', function (req, res) {
-        console.log('xxxxxxxxxxxxxx')
         const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
         // const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
