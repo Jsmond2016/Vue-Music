@@ -1,7 +1,14 @@
 <template>
+  <!-- ![search list interface](https://i.loli.net/2019/04/10/5cad5641c3b4a.png) -->
   <div class="search-list" v-show="searches.length">
     <transition-group name="list" tag="ul">
-      <li :key="item" class="search-item" @click="selectItem(item)" v-for="item in searches">
+      <li
+        class="search-item"
+        v-for="item in searches"
+        :key="item"
+        @click="selectItem(item)"
+      >
+      <!-- @click.stop：因为整个icon是上面li的子元素，所以要stop -->
         <span class="text">{{item}}</span>
         <span class="icon" @click.stop="deleteOne(item)">
           <i class="icon-delete"></i>
@@ -12,43 +19,24 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {
-    props: {
-      searches: {
-        type: Array,
-        default: () => []
-      }
+export default {
+  props: {
+    searches: {
+      type: Array,
+      default: null
+    }
+  },
+  methods: {
+    selectItem(item) {
+      this.$emit('select', item)
     },
-    methods: {
-      selectItem(item) {
-        this.$emit('select', item)
-      },
-      deleteOne(item) {
-        this.$emit('delete', item)
-      }
+    deleteOne(item) {
+      this.$emit('delete', item)
     }
   }
+}
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "~common/stylus/variable"
-
-  .search-list
-    .search-item
-      display: flex
-      align-items: center
-      height: 40px
-      overflow: hidden
-      &.list-enter-active, &.list-leave-active
-        transition: all 0.1s
-      &.list-enter, &.list-leave-to
-        height: 0
-      .text
-        flex: 1
-        color: $color-text-l
-      .icon
-        extend-click()
-        .icon-delete
-          font-size: $font-size-small
-          color: $color-text-d
+<style scoped lang="scss" rel="stylesheet/scss">
+@import './search-list.scss';
 </style>

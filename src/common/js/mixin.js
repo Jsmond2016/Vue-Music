@@ -1,6 +1,6 @@
-import {mapGetters, mapMutations, mapActions} from 'vuex'
-import {playMode} from 'common/js/config'
-import {shuffle} from 'common/js/util'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { playMode } from 'common/js/config'
+import { shuffle } from 'common/js/util'
 
 export const playlistMixin = {
   computed: {
@@ -26,10 +26,18 @@ export const playlistMixin = {
   }
 }
 
+/*
+playlist.vue
+player.vue
+*/
 export const playerMixin = {
   computed: {
     iconMode() {
-      return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+      return this.mode === playMode.sequence
+        ? 'icon-sequence'
+        : this.mode === playMode.loop
+          ? 'icon-loop'
+          : 'icon-random'
     },
     ...mapGetters([
       'sequenceList',
@@ -40,6 +48,15 @@ export const playerMixin = {
     ])
   },
   methods: {
+    ...mapMutations({
+      setPlayMode: 'SET_PLAY_MODE',
+      setPlaylist: 'SET_PLAYLIST',
+      setCurrentIndex: 'SET_CURRENT_INDEX'
+    }),
+    ...mapActions([
+      'saveFavoriteList',
+      'deleteFavoriteList'
+    ]),
     changeMode() {
       const mode = (this.mode + 1) % 3
       this.setPlayMode(mode)
@@ -49,14 +66,17 @@ export const playerMixin = {
       } else {
         list = this.sequenceList
       }
+      // list change，currentSong change **getters.js**
+      // require: when mode change, current song not change, behide song change
+      // list change index change, so curentSong.id not change **getters.js**
       this.resetCurrentIndex(list)
       this.setPlaylist(list)
     },
-    resetCurrentIndex(list) {
+    resetCurrentIndex(list) { // when mode change, current song not change
       let index = list.findIndex((item) => {
-        return item.id === this.currentSong.id
-      })
-      this.setCurrentIndex(index)
+            return item.id === this.currentSong.id
+          })
+          this.setCurrentIndex(index);
     },
     toggleFavorite(song) {
       if (this.isFavorite(song)) {
@@ -71,29 +91,25 @@ export const playerMixin = {
       }
       return 'icon-not-favorite'
     },
+    // 判断当前歌曲是否已经在收藏列表中了
     isFavorite(song) {
       const index = this.favoriteList.findIndex((item) => {
         return item.id === song.id
       })
       return index > -1
-    },
-    ...mapMutations({
-      setPlayMode: 'SET_PLAY_MODE',
-      setPlaylist: 'SET_PLAY_LIST',
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayingState: 'SET_PLAYING_STATE'
-    }),
-    ...mapActions([
-      'saveFavoriteList',
-      'deleteFavoriteList'
-    ])
+    }
   }
 }
 
+/*
+search.vue
+add-song.vue
+*/
 export const searchMixin = {
   data() {
     return {
       query: '',
+      // 设置scroll组件刷新时间
       refreshDelay: 120
     }
   },
@@ -103,10 +119,15 @@ export const searchMixin = {
     ])
   },
   methods: {
+    ...mapActions([
+      'saveSearchHistory',
+      'deleteSearchHistory'
+    ]),
     onQueryChange(query) {
       this.query = query
     },
     blurInput() {
+      // 带这个refs的，要注意是否在组件中添加引用了
       this.$refs.searchBox.blur()
     },
     addQuery(query) {
@@ -114,10 +135,6 @@ export const searchMixin = {
     },
     saveSearch() {
       this.saveSearchHistory(this.query)
-    },
-    ...mapActions([
-      'saveSearchHistory',
-      'deleteSearchHistory'
-    ])
+    }
   }
 }

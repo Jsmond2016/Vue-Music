@@ -1,73 +1,92 @@
 <template>
+  <!-- ![rank detail interface](https://i.loli.net/2019/04/10/5cadb3ddb41c9.png) -->
   <transition name="slide">
-    <music-list :rank="rank" :title="title" :bg-image="bgImage" :songs="songs"></music-list>
+    <music-list
+      :rank="rank"
+      :title="title"
+      :bg-image="bgImage"
+      :songs="songs"
+    >
+    </music-list>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
-  import MusicList from 'components/music-list/music-list'
-  import {getMusicList} from 'api/rank'
-  import {ERR_OK} from 'api/config'
-  import {mapGetters} from 'vuex'
-  import {createSong} from 'common/js/song'
+import MusicList from 'components/music-list/music-list'
+import { getMusicList } from 'api/rank'
+import { getMusic } from 'api/song'
+import { ERR_OK } from 'api/config'
+import { mapGetters } from 'vuex'
+// import { createSong } from 'common/js/song'
+import { createSong } from 'common/js/song'
 
-  export default {
-    computed: {
-      title() {
-        return this.topList.topTitle
-      },
-      bgImage() {
-        if (this.songs.length) {
-          return this.songs[0].image
-        }
-        return ''
-      },
-      ...mapGetters([
-        'topList'
-      ])
+export default {
+  components: {
+    MusicList
+  },
+  data() {
+    return {
+      songs: [],
+      rank: true
+    }
+  },
+  created() {
+    this._getMusicList()
+  },
+  computed: {
+    ...mapGetters(['topList']),
+    title() {
+      return this.topList.topTitle
+      // return 'a'
     },
-    data() {
-      return {
-        songs: [],
-        rank: true
+    bgImage() {
+      // 背景显示第一个歌曲的背景图
+      if (this.songs.length) {
+        return this.songs[0].image
       }
-    },
-    created() {
-      this._getMusicList()
-    },
-    methods: {
-      _getMusicList() {
-        if (!this.topList.id) {
-          this.$router.push('/rank')
-          return
-        }
-        getMusicList(this.topList.id).then((res) => {
-          if (res.code === ERR_OK) {
-            this.songs = this._normalizeSongs(res.songlist)
-          }
-        })
-      },
-      _normalizeSongs(list) {
-        let ret = []
-        list.forEach((item) => {
-          const musicData = item.data
-          if (musicData.songid && musicData.albummid) {
-            ret.push(createSong(musicData))
-          }
-        })
-        return ret
+      return ''
+    }
+  },
+  methods: {
+    _getMusicList() {
+      if (!this.topList.id) {
+        this.$router.push('/rank')
+        return
       }
+      // console.log(this.topList);
+      getMusicList(this.topList.id).then(res => {
+        if (res.code === ERR_OK) {
+          // console.log(res.songlist);
+          this.songs = this._normalizeSongs(res.songlist)
+        }
+      })
     },
-    components: {
-      MusicList
+     _normalizeSongs(list) {
+      let ret = []
+      list.forEach((item) => {
+        let {data} = item
+        if (data.songid && data.albummid) {
+          // console.log(item);
+          getMusic(data.songmid).then((res) => { // 这里需要先获取vkey
+            if (res.code === ERR_OK) {
+              const svkey = res.data.items
+              const songVkey = svkey[0].vkey
+              // console.log(item.songid, item.songmid);
+              const newSong = createSong(data, songVkey) // 在这里把vkey和musicData传进去
+              // console.log(newSong);
+              // console.log(this.currentSong, this.singer, this.playing, this.fullScreen, this.playlist, this.sequenceList, this.mode, this.currentIndex, this.currentSong);
+              ret.push(newSong)
+              // console.log(this.currentSong, this.singer, this.playing, this.fullScreen, this.playlist, this.sequenceList, this.mode, this.currentIndex, this.currentSong);
+            }
+          })
+        }
+      })
+      return ret
     }
   }
+}
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
-  .slide-enter-active, .slide-leave-active
-    transition: all 0.3s ease
-
-  .slide-enter, .slide-leave-to
-    transform: translate3d(100%, 0, 0)
+<style scoped lang="scss" rel="stylesheet/scss">
+@import './top-list.scss';
 </style>

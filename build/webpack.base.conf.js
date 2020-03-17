@@ -26,19 +26,22 @@ module.exports = {
   },
   output: {
     path: config.build.assetsRoot,
-    filename: '[name]jsonp.js',
+    filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['*', '.vue', '.json', '.js'],
+    extensions: ['.js', '.vue', '.json'],
     alias: {
+      'vue$': 'vue/dist/vue.esm.js',
       'src': resolve('src'),
+      'api': resolve('src/api'),
+      'base': resolve('src/base'),
       'common': resolve('src/common'),
       'components': resolve('src/components'),
-      'api': resolve('src/api'),
-      'base': resolve('src/base')
+      'router': resolve('src/router'),
+      'store': resolve('src/store')
     }
   },
   module: {

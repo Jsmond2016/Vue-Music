@@ -1,6 +1,8 @@
+
 import * as types from './mutation-types'
 
 const mutations = {
+  // 所有参数中的state就是state.js中的内容
   [types.SET_SINGER](state, singer) {
     state.singer = singer
   },
@@ -10,8 +12,8 @@ const mutations = {
   [types.SET_FULL_SCREEN](state, flag) {
     state.fullScreen = flag
   },
-  [types.SET_PLAY_LIST](state, list) {
-    state.playList = list
+  [types.SET_PLAYLIST](state, list) {
+    state.playlist = list
   },
   [types.SET_SEQUENCE_LIST](state, list) {
     state.sequenceList = list
@@ -25,7 +27,7 @@ const mutations = {
   [types.SET_DISC](state, disc) {
     state.disc = disc
   },
-  [types.SET_TOPLSIT](state, topList) {
+  [types.SET_TOP_LIST](state, topList) {
     state.topList = topList
   },
   [types.SET_SEARCH_HISTORY](state, history) {
@@ -34,8 +36,8 @@ const mutations = {
   [types.SET_PLAY_HISTORY](state, history) {
     state.playHistory = history
   },
-  [types.SET_FAVORITE_LIST](state, favoritelist) {
-    state.favoriteList = favoritelist
+  [types.SET_FAVORITE_LIST](state, list) {
+    state.favoriteList = list
   }
 }
 

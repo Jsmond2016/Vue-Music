@@ -1,7 +1,9 @@
 <template>
+  <!-- ![singer detail interface](https://i.loli.net/2019/04/08/5caac3e8e7a0f.png) -->
   <div class="song-list">
     <ul>
-      <li @click=selectItem(song,index) v-for="(song, index) in songs" :key="index" class="item">
+      <li class="item" v-for="(song, index) in songs" @click="selectItem(song, index)" :key="index">
+      <!-- 设置排行榜的排行样式 -->
         <div class="rank" v-show="rank">
           <span :class="getRankCls(index)">{{getRankText(index)}}</span>
         </div>
@@ -15,81 +17,45 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {
-    props: {
-      songs: {
-        type: Array,
-        default: () => {
-          return []
-        }
-      },
-      rank: {
-        type: Boolean,
-        default: false
+export default {
+  props: {
+    songs: {
+      type: Array,
+      default: null
+    },
+    // 默认rank为false，代表默认没有排行的样式
+    rank: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    selectItem(item, index) {
+      this.$emit('select', item, index)
+    },
+    getDesc(song) {
+      return `${song.singer}·${song.album}`
+    },
+    // 和排行榜有关的样式
+    getRankCls(index) {
+      // 前三名，是图片的样式
+      if (index <= 2) {
+        // 在scss文件中有对应的样式
+        return `icon icon${index}`
+      } else {
+        // 否则就是文字样式，文字的实现在getRankText(index)中
+        return 'text'
       }
     },
-    methods: {
-      getRankCls(index) {
-        if (index < 3) {
-          return `icon icon${index}`
-        } else {
-          return `text`
-        }
-      },
-      getRankText(index) {
-        if (index > 2) {
-          return index + 1
-        }
-      },
-      selectItem(item, index) {
-        this.$emit('select', item, index)
-      },
-      getDesc(song) {
-        return `${song.singer}.${song.album}`
+    getRankText(index) {
+      if (index > 2) {
+        return index + 1
       }
     }
   }
+}
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "~common/stylus/variable"
-  @import "~common/stylus/mixin"
-
-  .song-list
-    .item
-      display: flex
-      align-items: center
-      box-sizing: border-box
-      height: 64px
-      font-size: $font-size-medium
-      .rank
-        flex: 0 0 25px
-        width: 25px
-        margin-right: 30px
-        text-align: center
-        .icon
-          display: inline-block
-          width: 25px
-          height: 24px
-          background-size: 25px 24px
-          &.icon0
-            bg-image('first')
-          &.icon1
-            bg-image('second')
-          &.icon2
-            bg-image('third')
-        .text
-          color: $color-theme
-          font-size: $font-size-large
-      .content
-        flex: 1
-        line-height: 20px
-        overflow: hidden
-        .name
-          no-wrap()
-          color: $color-text
-        .desc
-          no-wrap()
-          margin-top: 4px
-          color: $color-text-d
+<style lang="scss" rel="stylesheet/scss" scoped>
+@import './song-list.scss';
 </style>

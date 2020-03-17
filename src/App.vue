@@ -2,26 +2,26 @@
   <div id="app">
     <m-header></m-header>
     <tab></tab>
-   <keep-alive>
-     <router-view></router-view>
-   </keep-alive>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+    <!-- 我需要在player.vue中，取vuex中的变量来控制player组件的显示，不能默认显示-->
     <player></player>
   </div>
 </template>
 
-<script type="text/ecmascript-6">/* eslint-disable */
-  import  MHeader from 'components/m-header/m-header'
-  import Tab from 'components/tab/tab'
-  import Player from 'components/player/player'
-  export default {
-    components: {
+<script>
+import MHeader from 'components/mHeader/mHeader'
+import Tab from 'components/tab/tab'
+import Player from 'components/player/player'
+export default {
+  name: 'App',
+  components: {
       MHeader,
       Tab,
-      Player
+      Player,
     }
-  }
+}
 </script>
-
-<style>
-
+<style scoped lang="stylus" rel="stylesheet/stylus">
 </style>
